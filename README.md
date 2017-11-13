@@ -28,7 +28,7 @@ Usage
 	  -i ID, --id ID        ucs management user id
 	  -u UCS, --ucs UCS     ucs management ip
 	  -p PORT, --port PORT  ucs management port
-	  -s, --secure          secure
+	  -s, --secure          https transport
 	  -f FILTER, --filter FILTER service profile name filter
 	  --templates           include templates
 	  --http                run webserver on port 8000?
