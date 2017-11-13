@@ -75,7 +75,6 @@ var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 d3.json("bootp.json", function(error, graph) {
-    console.log(graph)
     if (error)  throw error;
 
     simulation

@@ -15,3 +15,27 @@ ucsm-bootpol-report.py
        - argparse module
        - getpass module
 
+Usage
+-----
+
+	usage: ucsm-bootpol-report.py [-h] -i ID -u UCS [-p PORT] [-s] [-f FILTER]
+								  [--templates] [--http]
+
+	show the relationship
+
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -i ID, --id ID        ucs management user id
+	  -u UCS, --ucs UCS     ucs management ip
+	  -p PORT, --port PORT  port
+	  -s, --secure          secure
+	  -f FILTER, --filter FILTER
+							service profile name filter
+	  --templates           include templates
+	  --http                run webserver on port 8000?
+
+
+Warning
+-------
+
+Browser cache can make errant data show up

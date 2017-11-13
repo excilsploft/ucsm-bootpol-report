@@ -1,0 +1,25 @@
+{
+    "links": [
+        {
+            "source": "esx",
+            "target": "esx-1",
+            "value": 1
+        }
+    ],
+    "nodes": [
+        {
+            "group": 0,
+            "id": "esx",
+            "wwn": [
+                "50:world_wide_node_name",
+                "50:world_wide_node_name",
+                "50:world_wide_node_name",
+                "50:world_wide_node_name"
+            ]
+        },
+        {
+            "group": 7,
+            "id": "esx-1"
+        }
+    ]
+}

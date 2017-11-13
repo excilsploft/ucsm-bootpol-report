@@ -9,7 +9,7 @@ import SimpleHTTPServer
 import SocketServer
 
 
-CONST_HTTPD_PORT = 8001
+CONST_HTTPD_PORT = 8000
 CONST_BOOTP = 'bootp.json'
 
 
@@ -163,7 +163,7 @@ def main(args):
         handler = SimpleHTTPServer.SimpleHTTPRequestHandler
         httpd = SocketServer.TCPServer(("",CONST_HTTPD_PORT), handler)
 
-        print "point browser to http://localhost:8000"
+        print "point browser to http://localhost:{0}".format(CONST_HTTPD_PORT)
         httpd.serve_forever()
 
 
@@ -180,7 +180,8 @@ if __name__ == '__main__':
                         required=False)
     PARSER.add_argument('--templates', help='include templates', required=False,
                          action='store_true')
-    PARSER.add_argument('--http', help='run webserver on port 8000?',
+    PARSER.add_argument('--http',
+                        help='run webserver on port {0}?'.format(CONST_HTTPD_PORT),
                         required=False, action='store_true')
 
     ARGS = PARSER.parse_args()
