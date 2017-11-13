@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg {
+    margin-left:auto;
+    margin-right:auto;
+    display:block;
+}
+
+.column {
+    max-width: 960px;
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    padding: 0 10px;
+}
+
+.tip {
+    font-style: Georgia;
+    background-color: hsla(189,5%,95%,1);
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    width: 150px;
+}
+
+.tip {
+    width: 150px;
+}
+
+.tip .wwn {
+    font-size: .75em;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: 0.6;
+}
+
+.node circle {
+  stroke: #fff;
+  stroke-width: 1.5px;
+
+}
+
+.nodes rect {
+  stroke-width: 2.5px;
+}
+
+.nodes text {
+    pointer-events: none;
+    font: 8px sans-serif;
+}
+
+
+</style>
+<div id="column">
+    <svg width="960" height="800"></svg>
+</div>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var radius = 5;
+
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) { return d.id; }))
+    .force("charge", d3.forceManyBody().distanceMax(110))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+d3.json("bootp.json", function(error, graph) {
+    console.log(graph)
+    if (error)  throw error;
+
+    simulation
+        .nodes(graph.nodes)
+
+    simulation
+        .force("link")
+        .links(graph.links);
+
+    var link = svg.selectAll(".link")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("class", "link");
+
+    var node = svg.selectAll(".node")
+        .data(graph.nodes)
+        .enter().append("g")
+        .attr("class", "nodes");
+
+    node.append("circle")
+        .attr("r", radius)
+        .attr("fill", function(d) { return color(d.group); })
+        .attr("id", function(d) { return d.id; })
+        .on("mouseout", mouseout)
+        .on("mouseover", mouseover)
+        .on("click", display)
+        .call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+
+        /*.on("click", function(d) {
+            tooltip
+                .style("left", "90px")
+                .html("<div class='info'>" + d.id + "</div>")
+                .style("visibility", "visible");
+            });
+         */
+
+    node.append("text")
+        .attr("dx", 12)
+        .attr("dy", ".35em")
+        .attr("class", "label")
+        .style("opacity", 0)
+        .text(function(d){ return d.id; });
+
+/*    svg.append("rect")
+        .attr("rx", 3)
+        .attr("ry", 3)
+        .attr("x", 12)
+        .attr("y", 12)
+        .attr("class", "legend")
+        .attr("id", "legend")
+        .style("opacity", 0)
+        .style("stroke", "none")
+        .style("fill", "none")
+        .attr("width", 200)
+        .attr("height", 200);
+*/
+
+    var tooltip = d3.select("body")
+      .append("div")
+      .attr("id", "tip")
+      .attr("class", "tip")
+      .style("position", "absolute")
+      .style("z-index", "20")
+      .style("visibility", "hidden")
+      .style("top", 40+"px");
+
+    simulation.on("tick", function() {
+         link.attr("x1", function(d) { return d.source.x; })
+             .attr("y1", function(d) { return d.source.y; })
+             .attr("x2", function(d) { return d.target.x; })
+             .attr("y2", function(d) { return d.target.y; });
+
+             node.attr("transform", function(d) { 
+             var mx = Math.max(radius, Math.min(width - radius, d.x));
+             var my = Math.max(radius, Math.min(height - radius, d.y));
+
+             return "translate(" + mx + "," + my + ")"; });
+    });
+
+});
+
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d.fx = null;
+  d.fy = null;
+}
+
+function buildTip(d) {
+   var output_string, wwn_string;
+   output_string = "<div class='info'>" + d.id + "</div>";
+
+   if("wwn" in d) {
+   for( var i=0; i < d.wwn.length; i++){
+         output_string = output_string + "<div class='wwn'>wwn: " + d.wwn[i] + "</div>";
+        }
+    }
+
+    console.log(output_string);
+    return output_string
+}
+
+function mouseover(d) {
+   //console.log(d)
+   d3.select(this.nextElementSibling).style("opacity", 1);
+   tooltip = d3.select("#tip");
+   tooltip.style("left", "90px")
+        .html(buildTip(d))
+        .style("visibility", "visible");
+}
+
+function mouseout(d) {
+   d3.select(this.nextElementSibling).style("opacity", 0);
+   tooltip = d3.select("#tip");
+   tooltip.style("visibility", "hidden");
+}
+
+function display(d) {
+    t_node = d3.select(this.nextElementSibling);
+    tooltip
+        .style("left", "90px")
+        .html(buildTip(d))
+        .style("visibility", "visible");
+}
+
+function clicked(d) {
+    var active = this.active ? true : false,
+    opaque = active ? 0 : 1;
+   // console.log(active);
+   d3.select(this.nextElementSibling).style("opacity", opaque);
+   //var n = d3.select(this.nextElementSibling);
+   //console.log(n);
+   this.active = opaque;
+  // console.log(this.active);
+}
+</script>
+
