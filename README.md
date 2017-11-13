@@ -27,10 +27,9 @@ Usage
 	  -h, --help            show this help message and exit
 	  -i ID, --id ID        ucs management user id
 	  -u UCS, --ucs UCS     ucs management ip
-	  -p PORT, --port PORT  port
+	  -p PORT, --port PORT  ucs management port
 	  -s, --secure          secure
-	  -f FILTER, --filter FILTER
-							service profile name filter
+	  -f FILTER, --filter FILTER service profile name filter
 	  --templates           include templates
 	  --http                run webserver on port 8000?
 

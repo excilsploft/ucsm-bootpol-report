@@ -173,7 +173,7 @@ if __name__ == '__main__':
     PARSER.add_argument('-i', '--id', help='ucs management user id', 
                         required=True)
     PARSER.add_argument('-u', '--ucs', help='ucs management ip', required=True)
-    PARSER.add_argument('-p', '--port', help='port', required=False)
+    PARSER.add_argument('-p', '--port', help='ucs management port', required=False)
     PARSER.add_argument('-s', '--secure', help='secure',
                         action='store_true')
     PARSER.add_argument('-f', '--filter', help='service profile name filter',
