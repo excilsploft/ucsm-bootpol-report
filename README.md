@@ -3,6 +3,8 @@
 This set of files is a python script that generates a file that can be digested by a d3.js map to display boot policy usage
 
 
+simply cloning this repo, changing directory to it and running `python -m SimpleHTTPServer`will display the boot policy and service profile instance relationship defined in bootp.json
+
 ucsm-bootpol-report.py
 ----------------------
 
