@@ -151,10 +151,9 @@ def main(args):
 
     handle.logout()
 
-    if args.templates:
-        output_json = bootp_json(instance_list, boot_list)
-    else:
-        output_json = instance_json(template_list, instance_list, boot_list)
+    output_json = bootp_json(instance_list, boot_list)
+    #revisit the idea of building a hierarchy
+    #output_json = instance_json(template_list, instance_list, boot_list)
 
     with open(CONST_BOOTP, 'wb') as file_out:
         json.dump(output_json, file_out)
@@ -178,8 +177,6 @@ if __name__ == '__main__':
                         action='store_true')
     PARSER.add_argument('-f', '--filter', help='service profile name filter',
                         required=False)
-    PARSER.add_argument('--templates', help='include templates', required=False,
-                         action='store_true')
     PARSER.add_argument('--http',
                         help='run webserver on port {0}?'.format(CONST_HTTPD_PORT),
                         required=False, action='store_true')
